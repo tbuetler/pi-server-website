@@ -1,17 +1,28 @@
-<!-- Registrierform -->
-<form id="register-form">
-    <label for="register-username">Benutzername:</label>
-    <input type="text" id="register-username" name="username"><br><br>
-    <label for="register-password">Passwort:</label>
-    <input type="password" id="register-password" name="password"><br><br>
-    <button id="register-submit">Registrieren</button>
-</form>
-
-<!-- Anmeldeform -->
-<form id="login-form">
-    <label for="login-username">Benutzername:</label>
-    <input type="text" id="login-username" name="username"><br><br>
-    <label for="login-password">Passwort:</label>
-    <input type="password" id="login-password" name="password"><br><br>
-    <button id="login-submit">Einloggen</button>
-</form>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willkommen auf meiner Website</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<h1>Willkommen auf meiner Website</h1>
+<div id="welcome-page">
+    <p>Hier kann sich ein neuer Benutzer erstellen oder ein bestehender einloggen. </p>
+    <button id="login-button">Einloggen</button>
+    <button id="create-button">Neuer Benutzer</button>
+</div>
+<div id="login-page" style="display: none;">
+    <h1>Einloggen</h1>
+    <form id="login-form">
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <button id="login-submit">Einloggen</button>
+    </form>
+</div>
+<script src="js/script.js"></script>
+</body>
+</html>
