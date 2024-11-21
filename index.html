@@ -1,26 +1,17 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meine Website</title>
-    <link rel="stylesheet" href="css/styles.css"> <!-- Verweis auf die CSS-Datei -->
-</head>
-<body>
-    <header>
-        <img src="images/logo.png" alt="Logo" />
-        <h1>Willkommen auf meiner Website!</h1>
-    </header>
+<!-- Registrierform -->
+<form id="register-form">
+    <label for="register-username">Benutzername:</label>
+    <input type="text" id="register-username" name="username"><br><br>
+    <label for="register-password">Passwort:</label>
+    <input type="password" id="register-password" name="password"><br><br>
+    <input type="submit" value="Registrieren">
+</form>
 
-    <main>
-        <p>Dies ist eine Beispielseite, die mit HTML, CSS und JavaScript erstellt wurde.</p>
-        <button id="actionBtn">Klick mich</button>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Meine Website</p>
-    </footer>
-
-    <script src="js/script.js"></script> <!-- Verweis auf die JavaScript-Datei -->
-</body>
-</html>
+<!-- Anmeldeform -->
+<form id="login-form">
+    <label for="login-username">Benutzername:</label>
+    <input type="text" id="login-username" name="username"><br><br>
+    <label for="login-password">Passwort:</label>
+    <input type="password" id="login-password" name="password"><br><br>
+    <input type="submit" value="Anmelden">
+</form>
