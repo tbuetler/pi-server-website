@@ -164,7 +164,6 @@
                 // Benutzer existiert, login erfolgreich
                 console.log('Login erfolgreich!');
 				alert("Login erfolgreich!");
-                window.location.href = "willkommen.html";
                 // Hier kannst du den Benutzer weiterleiten oder andere Aktionen ausführen
             } else {
                 // Benutzer existiert nicht oder Passwort falsch
