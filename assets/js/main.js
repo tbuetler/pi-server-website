@@ -164,23 +164,7 @@
                 // Benutzer existiert, login erfolgreich
                 console.log('Login erfolgreich!');
 				alert("Login erfolgreich!");
-                if (sessionStorage.getItem('loggedIn') === 'true') {
-                    // Der Benutzer ist angemeldet, lade die Seite
-                    fetch('willkommen.html', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                        .then(response => response.text())
-                        .then(html => {
-                            document.body.innerHTML = html;
-                        })
-                        .catch(error => console.error(error));
-                } else {
-                    // Der Benutzer ist nicht angemeldet, leite ihn zur Anmeldeseite weiter
-                    window.location.href = 'login.html';
-                }
+                window.location.href = "willkommen.html";
                 // Hier kannst du den Benutzer weiterleiten oder andere Aktionen ausführen
             } else {
                 // Benutzer existiert nicht oder Passwort falsch
