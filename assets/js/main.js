@@ -101,12 +101,43 @@
 
 		})();
 
-	// Signup Form.
+	// Login Form.
+	// Event-Listener für den Login-Button
+	document.getElementById('login-button').addEventListener('click', (e) => {
+		e.preventDefault();
+		const email = document.getElementById('email').value;
+		const password = document.getElementById('password').value;
+
+		// Öffne die Datenbank
+		const db = new sqlite3.Database('./database.db');
+
+		// Überprüfe, ob der Benutzer existiert
+		db.get('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, row) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			if (row) {
+				// Benutzer existiert, login erfolgreich
+				console.log('Login erfolgreich!');
+				// Hier kannst du den Benutzer weiterleiten oder andere Aktionen ausführen
+			} else {
+				// Benutzer existiert nicht oder Passwort falsch
+				console.log('Falsche Email oder Passwort!');
+			}
+
+			// Schließe die Datenbank
+			db.close();
+		});
+	});
+
+	/*
 		(function() {
 
 			// Vars.
-				var $form = document.querySelectorAll('#signup-form')[0],
-					$submit = document.querySelectorAll('#signup-form input[type="submit"]')[0],
+				var $form = document.querySelectorAll('#login-form')[0],
+					$submit = document.querySelectorAll('#login-form input[type="login"]')[0],
 					$message;
 
 			// Bail if addEventListener isn't supported.
@@ -167,5 +198,7 @@
 				});
 
 		})();
+
+	 */
 
 })();
