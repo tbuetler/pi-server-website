@@ -16,4 +16,4 @@ jobs:
       - name: Install safety for dependency scanning
         run: |
           pip install safety
-          safety scan
+          safety scan --no-login
