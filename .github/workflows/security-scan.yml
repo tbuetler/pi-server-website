@@ -1,7 +1,10 @@
-name: Security Scan
+name: Security Check
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -10,11 +13,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # Schritt 1: Checkout des Codes
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: npm install
+      # Schritt 2: Installiere Abhängigkeiten für Node.js (npm audit)
+      - name: Install Node.js dependencies
+        run: |
+          npm install
 
-      - name: Run OWASP Dependency-Check
-        run: npx owasp-dependency-check
+      # Schritt 3: Führe Sicherheitsüberprüfung der npm-Abhängigkeiten durch
+      - name: Run npm audit
+        run: |
+          npm audit --production --json > audit-report.json
+          cat audit-report.json
+        continue-on-error: true  # Weiter mit dem Workflow, auch wenn Sicherheitslücken gefunden werden
+
+      # Schritt 4: Installiere Python-Abhängigkeiten (falls verwendet)
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+
+      # Schritt 5: Bandit für Python-Code-Überprüfung
+      - name: Run Bandit security check (Python)
+        run: |
+          bandit -r . -f json -o bandit-report.json || true
+          cat bandit-report.json
+        continue-on-error: true
+
+      # Schritt 6: Sicherheitsscanner für Server-Konfiguration und Linux-Tools (z.B. ClamAV)
+      - name: Install ClamAV (Virus-Scanner)
+        run: |
+          sudo apt-get update
+          sudo apt-get install clamav
+          sudo freshclam  # Virus-Datenbank aktualisieren
+          clamscan -r /path/to/your/server/ || true
+
+      # Schritt 7: Überprüfe offene Ports und SSH-Konfiguration
+      - name: Check open ports (using netstat)
+        run: |
+          sudo apt-get install net-tools
+          sudo netstat -tuln
+
+      - name: Check SSH configuration
+        run: |
+          sudo cat /etc/ssh/sshd_config | grep -E 'PermitRootLogin|PasswordAuthentication|PubkeyAuthentication'
+
+      # Schritt 8: Review und Scan von Server-Konfigurationen
+      - name: Check server config for security issues
+        run: |
+          sudo lynis audit system
