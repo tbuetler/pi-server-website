@@ -32,15 +32,25 @@ jobs:
       # Schritt 4: Installiere ClamAV (Virus-Scanner) und führe einen Scan durch
       - name: Install ClamAV (Virus-Scanner)
         run: |
+          # Update the apt-get package list
           sudo apt-get update
-          sudo apt-get install clamav
-          sudo freshclam  # Virus-Datenbank aktualisieren
-          clamscan -r /var/www/pi-server-website || true
+          
+          # Install ClamAV
+          sudo apt-get install -y clamav clamav-freshclam
+
+          # Überprüfe die Version von ClamAV, um sicherzustellen, dass es installiert ist
+          clamav --version
+
+          # Versuche, die Virendatenbank zu aktualisieren
+          sudo freshclam || true  # Fehler ignorieren, um fortzufahren
+
+          # Führe den ClamAV-Scan aus
+          clamscan -r /var/www/pi-server-website || true  # Scan des angegebenen Verzeichnisses
 
       # Schritt 5: Überprüfe offene Ports und SSH-Konfiguration
       - name: Check open ports (using netstat)
         run: |
-          sudo apt-get install net-tools
+          sudo apt-get install -y net-tools
           sudo netstat -tuln
 
       - name: Check SSH configuration
