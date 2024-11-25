@@ -30,29 +30,12 @@ jobs:
         continue-on-error: true
 
       # Schritt 4: Installiere ClamAV (Virus-Scanner) und führe einen Scan durch
-      - name: Stop any existing clamav processes
-        run: |
-          sudo pkill freshclam || true
-          sudo pkill clamav || true
-
-      - name: Clean up ClamAV log file
-        run: |
-          sudo rm -f /var/log/clamav/freshclam.log || true
-          sudo chown -R clamav:clamav /var/log/clamav
-          sudo chmod -R 755 /var/log/clamav
-
-      - name: Install ClamAV
+      - name: Install ClamAV (Virus-Scanner)
         run: |
           sudo apt-get update
-          sudo apt-get install clamav clamav-freshclam libclamav9 libtfm1
-
-      - name: Update ClamAV virus database
-        run: |
-          sudo freshclam || true  # Ignoriere Fehler, um fortzufahren
-
-      - name: Run ClamAV scan
-        run: |
-          sudo clamscan -r /path/to/your/server/ || true
+          sudo apt-get install clamav
+          sudo freshclam  # Virus-Datenbank aktualisieren
+          clamscan -r /var/www/pi-server-website || true
 
       # Schritt 5: Überprüfe offene Ports und SSH-Konfiguration
       - name: Check open ports (using netstat)
