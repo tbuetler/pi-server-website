@@ -10,14 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test SSH connection
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 83.150.28.243 >> ~/.ssh/known_hosts
-          ssh -v -i ~/.ssh/id_rsa root@83.150.28.243 "echo 'SSH Verbindung erfolgreich!'"
-
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
