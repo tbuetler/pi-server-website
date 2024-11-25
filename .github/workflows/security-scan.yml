@@ -38,9 +38,6 @@ jobs:
           # Install ClamAV
           sudo apt-get install -y clamav clamav-freshclam
 
-          # Überprüfe die Version von ClamAV, um sicherzustellen, dass es installiert ist
-          clamav --version
-
           # Führe den ClamAV-Scan aus
           clamscan -r /var/www/pi-server-website || true  # Scan des angegebenen Verzeichnisses
 
