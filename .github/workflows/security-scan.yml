@@ -17,31 +17,56 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Schritt 1: OWASP Dependency-Check
+      # Schritt 2: Installiere Node.js und npm (falls nicht installiert)
+      - name: Install Node.js and npm
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm
+
+      # Schritt 3: Installiere Python pip (falls nicht installiert)
+      - name: Install Python pip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+
+      # Schritt 4: Führe den OWASP Dependency-Check aus
       - name: Run OWASP Dependency-Check
         run: |
           npx owasp-dependency-check
 
-      # Schritt 3: Führe Sicherheitsüberprüfung der npm-Abhängigkeiten durch
+      # Schritt 5: Führe Sicherheitsüberprüfung der npm-Abhängigkeiten durch
       - name: Run npm audit
         run: |
           npm audit --production --json > audit-report.json
           cat audit-report.json
         continue-on-error: true  # Weiter mit dem Workflow, auch wenn Sicherheitslücken gefunden werden
 
-      # Schritt 4: Installiere Python-Abhängigkeiten (falls verwendet)
+      # Schritt 6: Finde das Verzeichnis mit package.json und installiere npm-Abhängigkeiten
+      - name: Find directory with package.json
+        id: find-package-json
+        run: |
+          PACKAGE_DIR=$(find . -name 'package.json' -exec dirname {} \;)
+          echo "PACKAGE_DIR=$PACKAGE_DIR"
+          echo "::set-output name=dir::$PACKAGE_DIR"
+
+      - name: Install npm dependencies
+        run: |
+          cd ${{ steps.find-package-json.outputs.dir }}
+          npm install
+
+      # Schritt 7: Installiere Python-Abhängigkeiten (falls verwendet)
       - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
 
-      # Schritt 5: Bandit für Python-Code-Überprüfung
+      # Schritt 8: Bandit für Python-Code-Überprüfung
       - name: Run Bandit security check (Python)
         run: |
           bandit -r . -f json -o bandit-report.json || true
           cat bandit-report.json
         continue-on-error: true
 
-      # Schritt 6: Sicherheitsscanner für Server-Konfiguration und Linux-Tools (z.B. ClamAV)
+      # Schritt 9: Installiere ClamAV (Virus-Scanner)
       - name: Install ClamAV (Virus-Scanner)
         run: |
           sudo apt-get update
@@ -49,7 +74,7 @@ jobs:
           sudo freshclam  # Virus-Datenbank aktualisieren
           clamscan -r /path/to/your/server/ || true
 
-      # Schritt 7: Überprüfe offene Ports und SSH-Konfiguration
+      # Schritt 10: Überprüfe offene Ports und SSH-Konfiguration
       - name: Check open ports (using netstat)
         run: |
           sudo apt-get install net-tools
@@ -59,7 +84,7 @@ jobs:
         run: |
           sudo cat /etc/ssh/sshd_config | grep -E 'PermitRootLogin|PasswordAuthentication|PubkeyAuthentication'
 
-      # Schritt 8: Review und Scan von Server-Konfigurationen
+      # Schritt 11: Überprüfe Server-Konfiguration auf Sicherheitsprobleme
       - name: Check server config for security issues
         run: |
           sudo lynis audit system
