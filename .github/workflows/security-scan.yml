@@ -17,22 +17,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Find directory with package.json
-        id: find-package-json
-        run: |
-          PACKAGE_DIR=$(find . -name 'package.json' -exec dirname {} \;)
-          echo "PACKAGE_DIR=$PACKAGE_DIR"
-          echo "::set-output name=dir::$PACKAGE_DIR"
-
+      # Schritt 1: OWASP Dependency-Check
       - name: Run OWASP Dependency-Check
         run: |
           npx owasp-dependency-check
-
-      # Schritt 2: Installiere Abhängigkeiten für Node.js (npm audit)
-      - name: Install npm dependencies
-        run: |
-          cd ${{ steps.find-package-json.outputs.dir }}
-          npm install
 
       # Schritt 3: Führe Sicherheitsüberprüfung der npm-Abhängigkeiten durch
       - name: Run npm audit
