@@ -12,23 +12,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup SSH key and SSH-Agent
+      - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY_GITHUB }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_rsa
-          ssh-keyscan -H <your-server-ip> >> ~/.ssh/known_hosts
+          ssh-keyscan -H 83.150.28.243 >> ~/.ssh/known_hosts
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: <your-server-ip>
-          username: root
-          key: ${{ secrets.SSH_KEY_GITHUB }}
-          port: 22  # Ersetze mit dem korrekten Port, falls nötig
-          script: |
-            cd /var/www/pi-server-website/
-            git pull origin main
-            sudo systemctl restart nginx
+      - name: Deploy via SSH manually
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@83.150.28.243 "cd /var/www/pi-server-website/ && git pull origin main && sudo systemctl restart nginx"
