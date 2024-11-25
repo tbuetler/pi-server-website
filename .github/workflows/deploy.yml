@@ -8,17 +8,22 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Setup SSH key
+    steps:
+      - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 83.150.28.243 >> ~/.ssh/known_hosts
 
-      - name: Deploy via SSH manually
-        run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@83.150.28.243 "cd /var/www/pi-server-website/ && git pull origin main && sudo systemctl restart nginx"
+      - name: Zugang zum Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 83.150.28.243
+          username: server  # Hier den gewünschten Benutzer angeben
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/pi-server-website/
+            git pull origin main
+            sudo systemctl restart nginx
