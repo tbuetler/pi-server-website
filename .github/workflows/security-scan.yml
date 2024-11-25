@@ -22,13 +22,6 @@ jobs:
         run: |
           npx owasp-dependency-check
 
-      # Schritt 3: Bandit für Python-Code-Überprüfung (Falls Python verwendet wird)
-      - name: Run Bandit security check (Python)
-        run: |
-          bandit -r . -f json -o bandit-report.json || true
-          cat bandit-report.json
-        continue-on-error: true
-
       # Schritt 4: Installiere ClamAV (Virus-Scanner) und führe einen Scan durch
       - name: Install ClamAV (Virus-Scanner)
         run: |
@@ -52,6 +45,11 @@ jobs:
           sudo cat /etc/ssh/sshd_config | grep -E 'PermitRootLogin|PasswordAuthentication|PubkeyAuthentication'
 
       # Schritt 6: Überprüfe Server-Konfiguration auf Sicherheitsprobleme
+      - name: Install Lynis (Security Auditing Tool)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lynis
+
       - name: Check server config for security issues
         run: |
           sudo lynis audit system
