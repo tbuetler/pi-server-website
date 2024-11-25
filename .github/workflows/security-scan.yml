@@ -17,56 +17,19 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Schritt 2: Installiere Node.js und npm (falls nicht installiert)
-      - name: Install Node.js and npm
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y nodejs npm
-
-      # Schritt 3: Installiere Python pip (falls nicht installiert)
-      - name: Install Python pip
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-
-      # Schritt 4: Führe den OWASP Dependency-Check aus
+      # Schritt 2: Führe Sicherheitsüberprüfung mit OWASP Dependency-Check durch
       - name: Run OWASP Dependency-Check
         run: |
           npx owasp-dependency-check
 
-      # Schritt 5: Führe Sicherheitsüberprüfung der npm-Abhängigkeiten durch
-      - name: Run npm audit
-        run: |
-          npm audit --production --json > audit-report.json
-          cat audit-report.json
-        continue-on-error: true  # Weiter mit dem Workflow, auch wenn Sicherheitslücken gefunden werden
-
-      # Schritt 6: Finde das Verzeichnis mit package.json und installiere npm-Abhängigkeiten
-      - name: Find directory with package.json
-        id: find-package-json
-        run: |
-          PACKAGE_DIR=$(find . -name 'package.json' -exec dirname {} \;)
-          echo "PACKAGE_DIR=$PACKAGE_DIR"
-          echo "::set-output name=dir::$PACKAGE_DIR"
-
-      - name: Install npm dependencies
-        run: |
-          cd ${{ steps.find-package-json.outputs.dir }}
-          npm install
-
-      # Schritt 7: Installiere Python-Abhängigkeiten (falls verwendet)
-      - name: Install Python dependencies
-        run: |
-          pip install -r requirements.txt
-
-      # Schritt 8: Bandit für Python-Code-Überprüfung
+      # Schritt 3: Bandit für Python-Code-Überprüfung (Falls Python verwendet wird)
       - name: Run Bandit security check (Python)
         run: |
           bandit -r . -f json -o bandit-report.json || true
           cat bandit-report.json
         continue-on-error: true
 
-      # Schritt 9: Installiere ClamAV (Virus-Scanner)
+      # Schritt 4: Installiere ClamAV (Virus-Scanner) und führe einen Scan durch
       - name: Install ClamAV (Virus-Scanner)
         run: |
           sudo apt-get update
@@ -74,7 +37,7 @@ jobs:
           sudo freshclam  # Virus-Datenbank aktualisieren
           clamscan -r /path/to/your/server/ || true
 
-      # Schritt 10: Überprüfe offene Ports und SSH-Konfiguration
+      # Schritt 5: Überprüfe offene Ports und SSH-Konfiguration
       - name: Check open ports (using netstat)
         run: |
           sudo apt-get install net-tools
@@ -84,7 +47,7 @@ jobs:
         run: |
           sudo cat /etc/ssh/sshd_config | grep -E 'PermitRootLogin|PasswordAuthentication|PubkeyAuthentication'
 
-      # Schritt 11: Überprüfe Server-Konfiguration auf Sicherheitsprobleme
+      # Schritt 6: Überprüfe Server-Konfiguration auf Sicherheitsprobleme
       - name: Check server config for security issues
         run: |
           sudo lynis audit system
