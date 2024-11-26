@@ -1,0 +1,21 @@
+{
+    "name": "nodejs-multi-page-app",
+    "version": "1.0.0",
+    "description": "Eine einfache Multi-Page-Webanwendung mit Node.js, SQLite und NGINX.",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js",
+      "build-css": "sass ./public/scss/style.scss ./public/css/style.css"
+    },
+    "author": "Tim Bütler",
+    "license": "MIT",
+    "dependencies": {
+      "cookie": "^0.5.0", 
+      "sqlite3": "^5.1.2", 
+      "bcrypt": "^5.1.0" 
+    },
+    "devDependencies": {
+      "sass": "^1.55.0" 
+    }
+  }
+  
