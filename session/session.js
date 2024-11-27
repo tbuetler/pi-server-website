@@ -4,7 +4,7 @@ const session = {};
 function startSession(res, email) {
   const sessionId = crypto.randomBytes(16).toString('hex');
   session[sessionId] = { email };
-  res.setHeader('Set-Cookie', cookie.serialize('sessionId', sessionId, { httpOnly: true, maxAge: 3600 }));
+  res.setHeader('Set-Cookie', cookie.serialize('sessionId', sessionId, { httpOnly: true, secure: true, maxAge: 3600 }));
 }
 
 function getSession(req) {
