@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const sqlite3 = require("sqlite3");
+const session = require('express-session');
 
-// SQLite-Datenbankverbindung herstellen
 const database = new sqlite3.Database("./db/database.sqlite", (err) => {
     if (err) {
         console.error('Datenbankverbindung fehlgeschlagen:', err.message);
@@ -12,39 +12,62 @@ const database = new sqlite3.Database("./db/database.sqlite", (err) => {
     }
 });
 
-// Setze den Pfad zu den Views (HTML-Dateien)
 const viewsPath = path.join(__dirname, 'views');
 app.set("views", viewsPath);
-
-// Statische Dateien wie CSS und JS bereitstellen
-app.use(express.static(path.join(__dirname, 'public')));
-
-// JSON-Daten aus dem Body des Requests verarbeiten
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'styles')));
+app.use(express.urlencoded({ extended: true })); // Zum Parsen von Formulardaten
 
 // Login-Seite rendern
 app.get("/", (req, res) => {
-    res.sendFile(path.join(viewsPath, 'login.html')); // Login-Seite
+    res.sendFile(path.join(viewsPath, 'login.html'));
 });
+
+// Route für die Home-Seite
+app.get("/home", (req, res) => {
+    res.sendFile(path.join(viewsPath, 'home.html'));  // Sende die home.html-Datei
+});
+
 
 // Login-Post-Route
 app.post("/login", (req, res) => {
-    const { email, password } = req.body;
+    const email = req.body.email;
+    const password = req.body.password;
 
-    // Suche nach dem Benutzer in der Datenbank
-    database.get("SELECT * FROM users WHERE email = ? AND password = ?", [email, password], (err, row) => {
+    console.log("Eingegebene E-Mail:", email);
+    console.log("Eingegebenes Passwort:", password);
+
+    // Benutzer aus der Datenbank abfragen
+    database.get("SELECT * FROM users WHERE email = ?", [email], (err, row) => {
         if (err) {
             console.error(err);
-            res.status(500).send("Internal Server Error");
-        } else if (row) {
-            // Wenn Benutzer gefunden wird, Login erfolgreich
-            res.status(200).send("Login erfolgreich");
-            res.sendFile(path.join(viewsPath, 'home.html')); // Nach dem Login zur Startseite weiterleiten
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
+
+        if (row) {
+            console.log("Datenbank-Passwort:", row.password);  // Debugging: Zeigt das gespeicherte Passwort
+
+            // Passwort überprüfen
+            if (row.password === password) {
+                console.log("Passwort stimmt überein");
+                res.redirect("/home");  // Weiterleitung nach erfolgreichem Login
+            } else {
+                console.log("Passwort stimmt nicht überein");
+                res.status(401).json({ message: "Falsches Passwort" });
+            }
         } else {
-            // Wenn kein Benutzer gefunden oder Passwort falsch
-            res.status(401).send("Ungültige E-Mail oder Passwort");
+            console.log("Benutzer nicht gefunden");
+            res.status(404).json({ message: "Benutzer nicht gefunden" });
         }
     });
+});
+
+// Middleware zum Schutz der Home-Seite
+app.get("/home", (req, res) => {
+    if (!req.session.user) {
+        return res.redirect("/");  // Wenn nicht eingeloggt, zur Login-Seite weiterleiten
+    }
+    res.sendFile(path.join(viewsPath, 'home.html'));
 });
 
 // Server starten

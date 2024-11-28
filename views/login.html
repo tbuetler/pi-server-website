@@ -44,5 +44,12 @@
 <!-- Scripts -->
 <script src="/styles/js/main.js"></script>
 
+<script>
+    // Falls die Login-Route eine Fehlerantwort gibt, zeige die Fehlermeldung an
+    if (window.location.search.includes("error")) {
+        alert("Login fehlgeschlagen: Ungültige E-Mail oder Passwort");
+    }
+</script>
+
 </body>
 </html>

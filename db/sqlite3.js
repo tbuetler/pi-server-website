@@ -12,5 +12,3 @@ const db = new sqlite3.Database(dbPath, (err) => {
         console.log('Mit der SQLite-Datenbank verbunden');
     }
 });
-
-module.exports = db;

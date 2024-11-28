@@ -890,14 +890,14 @@ input[type=reset]:hover,
 input[type=button]:hover,
 button:hover,
 .button:hover {
-  background-color: #1fcaa7;
+  background-color: rgb(31.4326923077, 202.0673076923, 167.2668269231);
 }
 input[type=submit]:active,
 input[type=reset]:active,
 input[type=button]:active,
 button:active,
 .button:active {
-  background-color: #199e83;
+  background-color: rgb(24.5673076923, 157.9326923077, 130.7331730769);
 }
 input[type=submit].disabled, input[type=submit]:disabled,
 input[type=reset].disabled,
@@ -912,10 +912,10 @@ button:disabled,
 }
 @media screen and (max-width: 480px) {
   input[type=submit],
-input[type=reset],
-input[type=button],
-button,
-.button {
+  input[type=reset],
+  input[type=button],
+  button,
+  .button {
     padding: 0;
   }
 }
@@ -973,8 +973,8 @@ button,
     flex-direction: column;
   }
   #login-form input[type=type],
-#login-form input[type=password],
-#login-form input[type=email] {
+  #login-form input[type=password],
+  #login-form input[type=email] {
     width: 100%;
   }
   #login-form > * {
