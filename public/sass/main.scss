@@ -1,9 +1,10 @@
+@use 'sass:math';
 @import 'libs/vars';
 @import 'libs/functions';
 @import 'libs/mixins';
 @import 'libs/vendor';
 @import 'libs/breakpoints';
-@import '/assets/css/fontawesome-all.min.css';
+@import '/public/css/fontawesome-all.min.css';
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
 
 /*
@@ -31,6 +32,7 @@
 	@import 'base/bg';
 	@import 'base/typography';
 
+
 // Components.
 
 	@import 'components/section';
@@ -43,5 +45,5 @@
 // Layout.
 
 	@import 'layout/header';
-	@import 'layout/signup-form';
+	@import 'layout/login-form';
 	@import 'layout/footer';

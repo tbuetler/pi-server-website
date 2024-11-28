@@ -1,16 +1,47 @@
-<!DOCTYPE html>
-<html lang="de">
+<!DOCTYPE HTML>
+<!--
+	Eventually by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <title>Osterlager</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/public/css/main.css" />
 </head>
-<body>
-  <form action="/login" method="POST">
-    <input type="email" name="email" placeholder="E-Mail" required>
-    <input type="password" name="password" placeholder="Passwort" required>
-    <button type="submit">Login</button>
-  </form>
+<body class="is-preload">
+
+<!-- Header -->
+<header id="header">
+    <h1>Osterlager 2025</h1>
+    <p>Häschen Willkommen zum Osterlager 2025!<br>
+        Seid Ihr bereit?</p>
+</header>
+
+<!-- Signup Form -->
+<form id="login-form" method="post" action="/views/main.html">
+    <input type="email" name="email" id="email" placeholder="Email Address" />
+    <input type="password" name="password" id="password" placeholder="Password" />
+    <input type="submit" value="Login" />
+</form>
+
+<!-- Footer -->
+<footer id="footer">
+    <ul class="icons">
+        <li><a href="https://www.github.com/tbuetler" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+        <li><a href="mailto:tim.buetler@protonmail.ch" class="icon fa-envelope"><span class="label">Email</span></a>
+        </li>
+    </ul>
+    <ul class="copyright">
+        <li>&copy;Tim Bütler</li>
+        <li>Credits: <a href="http://html5up.net">HTML5 UP</a></li>
+    </ul>
+</footer>
+
+<!-- Scripts -->
+<script src="/public/js/main.js"></script>
+
 </body>
 </html>

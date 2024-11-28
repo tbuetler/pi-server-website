@@ -78,9 +78,9 @@
 
             // Images (in the format of 'url': 'alignment').
             images: {
-                'images/bg01.jpg': 'center',
-                'images/bg02.jpg': 'center',
-                'images/bg03.jpg': 'center'
+                '/images/bg01.jpg': 'center',
+                '/images/bg02.jpg': 'center',
+                '/images/bg03.jpg': 'center'
             },
 
             // Delay.
@@ -151,7 +151,7 @@
         const password = document.getElementById('password').value;
 
         // Öffne die Datenbank
-        const db = new sqlite3.Database('./database.db');
+        const db = new sqlite3.Database('./db/database.db');
 
         // Überprüfe, ob der Benutzer existiert
         db.get('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, row) => {

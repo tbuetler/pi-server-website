@@ -1,4 +1,4 @@
-const db = require('../config/db');
+const db = require('../db/db');
 const crypto = require('crypto');
 
 // Passwort hashen und salzen
@@ -22,7 +22,7 @@ function findUserByEmail(email, callback) {
 // Passwort ändern
 function changePassword(email, newPassword, callback) {
   const { salt, hashedPassword } = hashPassword(newPassword);
-  db.run('UPDATE users SET password = ?, salt = ? WHERE email = ?', [hashedPassword, salt, email], callback);
+  // db.run('UPDATE users SET password = ?, salt = ? WHERE email = ?', [hashedPassword, salt, email], callback);
 }
 
 module.exports = { findUserByEmail, changePassword, hashPassword, verifyPassword };

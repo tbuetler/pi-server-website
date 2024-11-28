@@ -5,7 +5,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const userModel = require('../models/user');
 const session = require('../session/session');
-const db = require('../config/db');
+const db = require('../db/db');
 
 // Login-Route
 function login(req, res) {
