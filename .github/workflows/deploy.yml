@@ -1,0 +1,29 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 83.150.28.243 >> ~/.ssh/known_hosts
+
+      - name: Zugang zum Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 83.150.28.243
+          username: server  # Hier den gewünschten Benutzer angeben
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/pi-server-website/
+            git pull origin main
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S sudo systemctl restart nginx

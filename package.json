@@ -1,0 +1,30 @@
+{
+  "name": "nodejs-multi-page-app",
+  "version": "1.0.0",
+  "description": "Eine einfache Multi-Page-Webanwendung mit Node.js, SQLite und NGINX.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build-css": "sass styles/sass/main.scss styles/css/main.css"
+  },
+  "author": "Tim Bütler",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie": "0.7.0",
+    "express": "^4.21.1",
+    "html": "^1.0.0",
+    "sqlite3": "^5.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tbuetler/pi-server-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tbuetler/pi-server-website/issues"
+  },
+  "homepage": "https://github.com/tbuetler/pi-server-website#readme",
+  "devDependencies": {
+    "sass": "^1.43.4"
+  }
+}

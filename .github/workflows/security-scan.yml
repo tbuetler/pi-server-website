@@ -1,0 +1,58 @@
+name: Security Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Schritt 1: Checkout des Codes
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Schritt 2: Führe Sicherheitsüberprüfung mit OWASP Dependency-Check durch
+      - name: Run OWASP Dependency-Check
+        run: |
+          npx owasp-dependency-check
+
+      # Schritt 4: Installiere ClamAV (Virus-Scanner) und führe einen Scan durch
+      - name: Install ClamAV (Virus-Scanner)
+        run: |
+          # Update apt-get Paketliste
+          sudo apt-get update
+          
+          # Installiere ClamAV
+          sudo apt-get install -y clamav clamav-freshclam
+
+          # Führe den ClamAV-Scan aus und speichere den Bericht
+          clamscan -r /var/www/pi-server-website > clamav_scan_report.txt || echo "ClamAV scan failed"
+          cat clamav_scan_report.txt
+
+      # Schritt 5: Überprüfe offene Ports und SSH-Konfiguration
+      - name: Check open ports (using netstat)
+        run: |
+          sudo apt-get install -y net-tools
+          sudo netstat -tuln
+
+      - name: Check SSH configuration
+        run: |
+          sudo cat /etc/ssh/sshd_config | grep -E 'PermitRootLogin|PasswordAuthentication|PubkeyAuthentication'
+
+      # Schritt 6: Installiere Lynis für Sicherheitsüberprüfung
+      - name: Install Lynis (Security Auditing Tool)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lynis
+
+      # Schritt 7: Überprüfe Server-Konfiguration auf Sicherheitsprobleme mit Lynis
+      - name: Run Lynis Security Audit
+        run: |
+          sudo lynis audit system | tee lynis_report.txt
+          cat lynis_report.txt
