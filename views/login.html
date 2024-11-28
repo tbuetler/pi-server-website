@@ -9,7 +9,8 @@
     <title>Osterlager</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="/public/css/main.css" />
+    <link rel="stylesheet" href="/styles/css/main.css" />
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
 </head>
 <body class="is-preload">
 
@@ -20,8 +21,8 @@
         Seid Ihr bereit?</p>
 </header>
 
-<!-- Signup Form -->
-<form id="login-form" method="post" action="/views/main.html">
+<!-- Login Form -->
+<form id="login-form" method="post" action="/login">
     <input type="email" name="email" id="email" placeholder="Email Address" />
     <input type="password" name="password" id="password" placeholder="Password" />
     <input type="submit" value="Login" />
@@ -41,7 +42,14 @@
 </footer>
 
 <!-- Scripts -->
-<script src="/public/js/main.js"></script>
+<script src="/styles/js/main.js"></script>
+
+<script>
+    // Falls die Login-Route eine Fehlerantwort gibt, zeige die Fehlermeldung an
+    if (window.location.search.includes("error")) {
+        alert("Login fehlgeschlagen: Ungültige E-Mail oder Passwort");
+    }
+</script>
 
 </body>
 </html>

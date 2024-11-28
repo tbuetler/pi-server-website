@@ -5,13 +5,16 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build-css": "sass ./public/sass/main.scss ./public/css/main.css"
+    "build-css": "sass styles/sass/main.scss styles/css/main.css"
   },
   "author": "Tim Bütler",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie": "0.7.0",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "html": "^1.0.0",
     "sqlite3": "^5.1.2"
   },
   "repository": {
@@ -23,6 +26,6 @@
   },
   "homepage": "https://github.com/tbuetler/pi-server-website#readme",
   "devDependencies": {
-    "sass": "^1.43.4"
+    "sass": "^1.81.0"
   }
 }
