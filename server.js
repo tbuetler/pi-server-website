@@ -3,6 +3,8 @@ const app = express();
 const path = require("path");
 const sqlite3 = require("sqlite3");
 const session = require('express-session');
+const bodyParser = require('body-parser');
+const fs = require('fs'); // Zum Speichern der Logs in eine Datei
 
 const database = new sqlite3.Database("./db/database.sqlite", (err) => {
     if (err) {
@@ -15,27 +17,26 @@ const database = new sqlite3.Database("./db/database.sqlite", (err) => {
 const viewsPath = path.join(__dirname, 'views');
 app.set("views", viewsPath);
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'styles')));
-app.use(express.urlencoded({ extended: true })); // Zum Parsen von Formulardaten
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.urlencoded({ extended: true }));
 
 // Login-Seite rendern
 app.get("/", (req, res) => {
-    res.sendFile(path.join(viewsPath, 'login.html'));
+    const error = req.query.error; // Fehler aus der URL abfragen
+    res.sendFile(path.join(viewsPath, 'login.html'), {
+        error: error // Fehler zur HTML-Seite übergeben
+    });
 });
 
 // Route für die Home-Seite
 app.get("/home", (req, res) => {
-    res.sendFile(path.join(viewsPath, 'home.html'));  // Sende die home.html-Datei
+    res.sendFile(path.join(viewsPath, 'home.html'));
 });
-
 
 // Login-Post-Route
 app.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-
-    console.log("Eingegebene E-Mail:", email);
-    console.log("Eingegebenes Passwort:", password);
 
     // Benutzer aus der Datenbank abfragen
     database.get("SELECT * FROM users WHERE email = ?", [email], (err, row) => {
@@ -45,29 +46,38 @@ app.post("/login", (req, res) => {
         }
 
         if (row) {
-            console.log("Datenbank-Passwort:", row.password);  // Debugging: Zeigt das gespeicherte Passwort
-
             // Passwort überprüfen
             if (row.password === password) {
-                console.log("Passwort stimmt überein");
-                res.redirect("/home");  // Weiterleitung nach erfolgreichem Login
+                res.redirect("/home");
             } else {
-                console.log("Passwort stimmt nicht überein");
-                res.status(401).json({ message: "Falsches Passwort" });
+                res.redirect('/?error=Falsche E-Mail oder Passwort');
             }
         } else {
-            console.log("Benutzer nicht gefunden");
-            res.status(404).json({ message: "Benutzer nicht gefunden" });
+            res.redirect('/?error=Benutzer nicht gefunden');
         }
     });
 });
 
-// Middleware zum Schutz der Home-Seite
-app.get("/home", (req, res) => {
-    if (!req.session.user) {
-        return res.redirect("/");  // Wenn nicht eingeloggt, zur Login-Seite weiterleiten
+// Route zum Speichern von Nachrichten im Log
+app.post("/logMessage", (req, res) => {
+    const message = req.body.message;
+
+    if (message) {
+        // Nachricht in einer Log-Datei speichern
+        const logMessage = `${new Date().toISOString()} - ${message}\n`;
+
+        fs.appendFile('./logs/messages.log', logMessage, (err) => {
+            if (err) {
+                console.error('Fehler beim Schreiben ins Log:', err);
+                return res.status(500).json({ message: 'Fehler beim Speichern der Nachricht.' });
+            }
+            console.log('Nachricht wurde im Log gespeichert:', message);
+            res.status(200).json({ message: 'Nachricht erfolgreich gespeichert.' });
+        });
+
+    } else {
+        res.status(400).json({ message: 'Keine Nachricht empfangen.' });
     }
-    res.sendFile(path.join(viewsPath, 'home.html'));
 });
 
 // Server starten

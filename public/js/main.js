@@ -151,7 +151,7 @@
         const password = document.getElementById('password').value;
 
         // Öffne die Datenbank
-        const db = new sqlite3.Database('./db/database.db');
+        const db = new sqlite3.Database('./db/database.sqlite');
 
         // Überprüfe, ob der Benutzer existiert
         db.get('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, row) => {

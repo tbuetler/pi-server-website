@@ -4,8 +4,7 @@
   "description": "Eine einfache Multi-Page-Webanwendung mit Node.js, SQLite und NGINX.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build-css": "sass styles/sass/main.scss styles/css/main.css"
+    "start": "node server.js"
   },
   "author": "Tim Bütler",
   "license": "MIT",
@@ -26,6 +25,6 @@
   },
   "homepage": "https://github.com/tbuetler/pi-server-website#readme",
   "devDependencies": {
-    "sass": "^1.81.0"
+    "body-parser": "^1.20.3"
   }
 }

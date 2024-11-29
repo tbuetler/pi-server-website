@@ -1,16 +1,11 @@
 <!DOCTYPE HTML>
-<!--
-	Eventually by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 <head>
     <title>Osterlager</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="/styles/css/main.css" />
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="icon" href="/images/favicon/favicon.ico" type="image/x-icon" />
 </head>
 <body class="is-preload">
 
@@ -42,12 +37,12 @@
 </footer>
 
 <!-- Scripts -->
-<script src="/styles/js/main.js"></script>
+<script src="/js/main.js"></script>
 
 <script>
-    // Falls die Login-Route eine Fehlerantwort gibt, zeige die Fehlermeldung an
-    if (window.location.search.includes("error")) {
-        alert("Login fehlgeschlagen: Ungültige E-Mail oder Passwort");
+    const error = new URLSearchParams(window.location.search).get('error');
+    if (error) {
+        alert(error);  // Zeigt eine Fehlermeldung an, wenn sie in der URL vorhanden ist
     }
 </script>
 

@@ -20,4 +20,4 @@ This is a website for the pi-server project.
 
 
 ## Preview
-![img.png](images/website_preview.png)
+![img.png](public/images/website_preview.png)
